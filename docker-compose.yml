@@ -11,17 +11,13 @@ services:
     restart: always
     env_file:
       - ./FlorAccess/.env
-    environment:
-      - POSTGRES_DB
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
     volumes:
       - floraccess_db_data:/var/lib/postgresql/floraccess_db_data
       - ./FlorAccess/Database:/docker-entrypoint-initdb.d
     networks:
       - floraccess-net
     healthcheck:
-      test: ['CMD-SHELL', 'psql -U ${FLORACCESS_POSTGRES_USER} -d ${FLORACCESS_POSTGRES_DB} -c "SELECT 1" || exit 1']
+      test: ["CMD-SHELL", "pg_isready -U ${FLORACCESS_DB_USER} -d ${FLORACCESS_DB_NAME} || exit 1"]
       interval: 5s
       timeout: 30s
       retries: 5
@@ -35,17 +31,13 @@ services:
     restart: always
     env_file:
       - ./Econoris/.env
-    environment:
-      - POSTGRES_DB
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
     volumes:
       - econoris_db_data:/var/lib/postgresql/econoris_db_data
       - ./Econoris/Database:/docker-entrypoint-initdb.d
     networks:
       - econoris-net
     healthcheck:
-      test: ["CMD-SHELL", "psql -U ${ECONORIS_POSTGRES_USER} -d ${ECONORIS_POSTGRES_DB} -c 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "pg_isready -U ${ECONORIS_DB_USER} -d ${ECONORIS_DB_NAME} || exit 1"]
       interval: 5s
       timeout: 30s
       retries: 5
@@ -63,34 +55,6 @@ services:
     restart: always
     env_file:
       - ./FlorAccess/.env
-    environment:
-      - APP_NAME
-      - APP_PORT
-      - HOST_NAME
-      - BASE_URL
-      - APP_ENV
-
-      - DB_URI
-
-      - JWT_SIGNING_KEY
-      - JWT_EXPIRATION
-
-      - MAIL_SERVICE
-      - MAIL_USERNAME
-      - MAIL_PASSWORD
-
-      - HASH_ROUNDS
-      - TOKEN_LENGTH
-      - TOKEN_EXPIRATION
-      - REQUEST_LIMIT_PER_SECOND
-      - REQUEST_LIMIT_TIME
-      - HASH_ALGORITHM
-      - CODE_DATA_SET
-
-      - HANDSHAKE_STATIC_TOKEN
-      - HANDSHAKE_AUTHORIZED_API
-
-      - DEFAULT_AUTHORIZED_APIS
     depends_on:
       floraccess-db:
         condition: service_healthy
@@ -109,21 +73,6 @@ services:
     restart: always
     env_file:
       - ./Econoris/.env
-    environment:
-      - APP_NAME
-      - APP_PORT
-      - HOST_NAME
-      - BASE_URL
-      - APP_ENV
-
-      - DB_URI
-
-      - HASH_ALGORITHM
-      - HASH_ROUNDS
-
-      - HANDSHAKE_STATIC_TOKEN
-      - AUTH_APP_URL
-      - AUTH_APP_HANDSHAKE_URL
     depends_on:
       econoris-db:
         condition: service_healthy
