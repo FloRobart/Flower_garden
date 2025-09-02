@@ -25,15 +25,15 @@ services:
   # Econoris Database #
   econoris-db:
     build:
-      context: ./Econoris/Database
+      context: ./Econoris_server/Database
       dockerfile: Dockerfile
     image: econoris-db:latest
     restart: always
     env_file:
-      - ./Econoris/.env
+      - ./Econoris_server/.env
     volumes:
       - econoris_db_data:/var/lib/postgresql/econoris_db_data
-      - ./Econoris/Database:/docker-entrypoint-initdb.d
+      - ./Econoris_server/Database:/docker-entrypoint-initdb.d
     networks:
       - econoris-net
     healthcheck:
@@ -67,12 +67,12 @@ services:
   # Econoris Server #
   econoris-server:
     build:
-      context: ./Econoris
+      context: ./Econoris_server
       dockerfile: Dockerfile
     image: econoris-server:latest
     restart: always
     env_file:
-      - ./Econoris/.env
+      - ./Econoris_server/.env
     depends_on:
       econoris-db:
         condition: service_healthy
