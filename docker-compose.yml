@@ -63,6 +63,11 @@ services:
       - flower_garden-net
     ports:
       - ${FLORACCESS_APP_PORT}:80
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://floraccess-server:80/api-docs || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # Econoris Server #
   econoris-server:
@@ -81,6 +86,35 @@ services:
       - flower_garden-net
     ports:
       - ${ECONORIS_APP_PORT}:80
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://econoris-server:80/api-docs || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  #==========#
+  # Web apps #
+  #==========#
+  econoris-app-web:
+    build:
+      context: ./econoris_app
+      dockerfile: Dockerfile
+    image: econoris-app-web:latest
+    restart: always
+    networks:
+      - flower_garden-net
+    ports:
+      - "26003:80"
+    depends_on:
+      econoris-server:
+        condition: service_healthy
+      floraccess-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://econoris-app-web:80 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   econoris_db_data:
