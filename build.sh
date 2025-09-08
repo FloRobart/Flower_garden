@@ -1,26 +1,86 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-echo "Recherche des projets liés dans le répertoire courant..."
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECTS_FILE="$ROOT_DIR/projects.list"
+LOGFILE="$ROOT_DIR/build.log"
 
-for link in *; do
-    if [ -L "$link" ]; then
-        target=$(readlink "$link")
-        echo -e "\n--- Installation et construction du projet $link ---"
-        if [ -f "$target/package.json" ]; then
-            (cd "$target" && npm install >> ./build.log 2>&1)
-            if [ $? -eq 0 ]; then
-                echo "Installation réussie pour $link."
-                (cd "$target" && npm run build >> ./build.log 2>&1)
-                if [ $? -eq 0 ]; then
-                    echo "Build réussi pour $link."
-                else
-                    echo "Échec du build pour $link. Voir build.log pour plus de détails."
-                fi
-            else
-                echo "Erreur lors de l'installation des dépendances pour $link. Voir build.log pour plus de détails."
-            fi
-        else
-            echo "Aucun package.json trouvé dans $target, build ignoré."
-        fi
+echo "Starting build at $(date)" | tee -a "$LOGFILE"
+
+if [ ! -f "$PROJECTS_FILE" ]; then
+    echo "projects.list introuvable dans $ROOT_DIR" | tee -a "$LOGFILE"
+    exit 1
+fi
+
+# Builder functions: each receives the project directory as first arg
+build_ts() {
+    local dir="$1"
+    if [ -f "$dir/package.json" ]; then
+        echo "[ts] npm install in $dir" | tee -a "$LOGFILE"
+        (cd "$dir" && npm install) >> "$LOGFILE" 2>&1
+        echo "[ts] npm run build in $dir" | tee -a "$LOGFILE"
+        (cd "$dir" && npm run build) >> "$LOGFILE" 2>&1
+    else
+        echo "[ts] pas de package.json dans $dir, build ignoré" | tee -a "$LOGFILE"
     fi
-done
+}
+
+build_flutter() {
+    local dir="$1"
+    if command -v flutter >/dev/null 2>&1; then
+        echo "[flutter] flutter pub get in $dir" | tee -a "$LOGFILE"
+        (cd "$dir" && flutter pub get) >> "$LOGFILE" 2>&1
+        echo "[flutter] flutter build apk (release) in $dir" | tee -a "$LOGFILE"
+        (cd "$dir" && flutter build apk --release) >> "$LOGFILE" 2>&1 || true
+        # We don't fail the whole script if flutter build fails; caller can inspect $LOGFILE
+    else
+        echo "[flutter] commande 'flutter' introuvable; installez Flutter pour builder $dir" | tee -a "$LOGFILE"
+    fi
+}
+
+declare -A BUILDERS
+BUILDERS[ts]=build_ts
+BUILDERS[flutter]=build_flutter
+
+echo "Lecture de $PROJECTS_FILE" | tee -a "$LOGFILE"
+
+while IFS= read -r line || [ -n "$line" ]; do
+    # Trim spaces and skip empty/comment lines
+    line="$(echo "$line" | sed -E 's/^\s+|\s+$//g')"
+    [[ -z "$line" || "$line" =~ ^# ]] && continue
+
+    # Expect: folder_name git_link type
+    folder=$(echo "$line" | awk '{print $1}')
+    repo=$(echo "$line" | awk '{print $2}')
+    type=$(echo "$line" | awk '{print $3}')
+
+    if [ -z "$folder" ] || [ -z "$repo" ] || [ -z "$type" ]; then
+        echo "Ligne invalide dans projects.list: '$line' (attendu: folder git_link type)" | tee -a "$LOGFILE"
+        continue
+    fi
+
+    dest="$ROOT_DIR/$folder"
+    echo -e "\n--- Processing $folder ($type) ---" | tee -a "$LOGFILE"
+
+    if [ ! -d "$dest" ]; then
+        echo "Dossier $dest introuvable — build ignoré (le script n'effectue pas de git)." | tee -a "$LOGFILE"
+        continue
+    fi
+
+    # Run builder if available
+    builder_fn="${BUILDERS[$type]:-}"
+    if [ -n "$builder_fn" ]; then
+        echo "Lancement du builder pour type='$type' ($builder_fn) dans $dest" | tee -a "$LOGFILE"
+        if $builder_fn "$dest"; then
+            echo "Build succeed for $folder" | tee -a "$LOGFILE"
+        else
+            echo "Build failed for $folder (see $LOGFILE)" | tee -a "$LOGFILE"
+        fi
+    else
+        echo "Aucun builder enregistré pour type='$type' - build ignoré pour $folder" | tee -a "$LOGFILE"
+    fi
+done < "$PROJECTS_FILE"
+
+echo "Build finished at $(date)" | tee -a "$LOGFILE"
+
+exit 0
