@@ -12,35 +12,19 @@ if [ ! -f "$PROJECTS_FILE" ]; then
     exit 1
 fi
 
-# Builder functions: each receives the project directory as first arg
-build_ts() {
-    local dir="$1"
-    if [ -f "$dir/package.json" ]; then
-        echo "[ts] npm install in $dir" | tee -a "$LOGFILE"
-        (cd "$dir" && npm install) >> "$LOGFILE" 2>&1
-        echo "[ts] npm run build in $dir" | tee -a "$LOGFILE"
-        (cd "$dir" && npm run build) >> "$LOGFILE" 2>&1
-    else
-        echo "[ts] pas de package.json dans $dir, build ignoré" | tee -a "$LOGFILE"
-    fi
-}
-
-build_flutter() {
-    local dir="$1"
-    if command -v flutter >/dev/null 2>&1; then
-        echo "[flutter] flutter pub get in $dir" | tee -a "$LOGFILE"
-        (cd "$dir" && flutter pub get) >> "$LOGFILE" 2>&1
-        echo "[flutter] flutter build apk (release) in $dir" | tee -a "$LOGFILE"
-        (cd "$dir" && flutter build apk --release) >> "$LOGFILE" 2>&1 || true
-        # We don't fail the whole script if flutter build fails; caller can inspect $LOGFILE
-    else
-        echo "[flutter] commande 'flutter' introuvable; installez Flutter pour builder $dir" | tee -a "$LOGFILE"
-    fi
-}
-
 declare -A BUILDERS
-BUILDERS[ts]=build_ts
-BUILDERS[flutter]=build_flutter
+
+# Source all builder scripts in builders/ (each should register itself in BUILDERS)
+BUILDER_DIR="$ROOT_DIR/builders"
+if [ -d "$BUILDER_DIR" ]; then
+    for f in "$BUILDER_DIR"/*.sh; do
+        [ -f "$f" ] || continue
+        # shellcheck disable=SC1090
+        . "$f"
+    done
+else
+    echo "Aucun dossier builders/ trouvé — aucun builder chargé" | tee -a "$LOGFILE"
+fi
 
 echo "Lecture de $PROJECTS_FILE" | tee -a "$LOGFILE"
 
