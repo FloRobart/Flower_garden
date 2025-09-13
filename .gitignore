@@ -2,6 +2,6 @@
 *.log
 
 
-!.*.example
+!.*.example*
 !.gitignore
 !.dockerignore
