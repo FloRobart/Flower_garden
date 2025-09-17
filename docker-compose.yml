@@ -1,4 +1,28 @@
 services:
+  #=======================#
+  # Reverse proxy Traefik #
+  #=======================#
+  traefik:
+    image: traefik:latest
+    restart: always
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.le.acme.httpchallenge=true"
+      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.le.acme.email=admin@florobart.fr"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "letsencrypt:/letsencrypt"
+    networks:
+      - flower_garden-net
+
   #==========#
   # Database #
   #==========#
@@ -78,6 +102,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.floraccess.rule=Host(`floraccess-server.florobart.fr`)"
+      - "traefik.http.routers.floraccess.entrypoints=websecure"
+      - "traefik.http.routers.floraccess.tls.certresolver=le"
+      - "traefik.http.services.floraccess.loadbalancer.server.port=80"
 
   # Econoris Server #
   econoris-server:
@@ -111,6 +141,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.econoris.rule=Host(`econoris-server.florobart.fr`)"
+      - "traefik.http.routers.econoris.entrypoints=websecure"
+      - "traefik.http.routers.econoris.tls.certresolver=le"
+      - "traefik.http.services.econoris.loadbalancer.server.port=80"
 
   #==========#
   # Web apps #
@@ -151,10 +187,17 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.econorisweb.rule=Host(`econoris.florobart.fr`)"
+      - "traefik.http.routers.econorisweb.entrypoints=websecure"
+      - "traefik.http.routers.econorisweb.tls.certresolver=le"
+      - "traefik.http.services.econorisweb.loadbalancer.server.port=80"
 
 volumes:
   econoris_db_data:
   floraccess_db_data:
+  letsencrypt:
 
 networks:
   floraccess-net:
