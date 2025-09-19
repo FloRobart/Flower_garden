@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Docker Compose Up",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "bash",
+      "args": ["-lc", "docker compose up --build"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": "Run RUN.sh",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "bash",
+      "args": ["-lc", "bash RUN.sh"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Start Infrastructure (Docker or Script)",
+      "configurations": ["Docker Compose Up"]
+    }
+  ]
+}
