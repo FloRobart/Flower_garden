@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echor "[❕] Initialisation des variables d'environnement"
+
 if [ ! -f ".env" ]; then
     cp .env.example .env
 fi
@@ -10,3 +12,5 @@ for f in ./config/.env.example.*; do
         cp "$f" "$target"
     fi
 done
+
+echo "[✅] Variable d'environnement initialisées."

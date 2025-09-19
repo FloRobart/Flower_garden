@@ -52,12 +52,12 @@ fi
 
 # 3) docker compose up ou docker-compose up (si docker compose indisponible)
 if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
-	echo -n "[❕] lancer les containers Docker (docker compose up $DETACH_FLAG)... "
+	echo -n "[❕] lancement des containers Docker (docker compose up $DETACH_FLAG)... "
 	docker compose up $DETACH_FLAG
 	echo "[✅] Containers lancés avec 'docker compose up'."
 	exit 0
 elif command -v docker-compose >/dev/null 2>&1; then
-	echo -n "[❕] lancer les containers Docker (docker-compose up $DETACH_FLAG)... "
+	echo -n "[❕] lancement des containers Docker (docker-compose up $DETACH_FLAG)... "
 	docker-compose up $DETACH_FLAG
 	echo "[✅] Containers lancés avec 'docker-compose up'."
 	exit 0
