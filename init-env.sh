@@ -13,4 +13,4 @@ for f in ./config/.env.example.*; do
     fi
 done
 
-echo "[✅] Variable d'environnement initialisées."
+echo "[✅] Variables d'environnement initialisées."
