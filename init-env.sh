@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echor "[❕] Initialisation des variables d'environnement"
+echo "[❕] Initialisation des variables d'environnement"
 
 if [ ! -f ".env" ]; then
     cp .env.example .env
