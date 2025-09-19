@@ -85,7 +85,7 @@ FlorAccess est une API d'authentification.
 
 </details>
 
-### [Econoris serveur](https://github.com/FloRobart/Econoris)
+### [Econoris serveur](https://github.com/FloRobart/Econoris_server)
 
 Econoris serveur est le backend de l'application Econoris.
 
@@ -99,7 +99,7 @@ Econoris serveur est le backend de l'application Econoris.
 
 </details>
 
-### [Econoris app](https://github.com/FloRobart/econoris-app)
+### [Econoris app](https://github.com/FloRobart/econoris_app)
 
 Econoris app est le frontend de l'application Econoris.
 
