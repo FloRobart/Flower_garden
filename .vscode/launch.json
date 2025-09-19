@@ -1,14 +1,8 @@
 {
-  // VS Code launch configurations to start the project infrastructure
-  // Two choices provided below:
-  // - "Docker Compose Up": runs `docker compose up --build` in the integrated terminal
-  // - "Run RUN.sh": executes the project's `RUN.sh` script in the integrated terminal
-  // Both configurations run with "noDebug": true so they act like tasks that open terminals.
   "version": "0.2.0",
   "configurations": [
     {
       "name": "Docker Compose Up",
-      // Use bash to run the compose command; `-lc` ensures the full command string is executed
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "bash",
@@ -22,7 +16,6 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "bash",
-      // Use -lc to allow the script to be found via relative path and to run with bash
       "args": ["-lc", "bash RUN.sh"],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
