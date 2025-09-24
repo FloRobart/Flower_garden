@@ -20,10 +20,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./traefik.yml:/etc/traefik/traefik.yml
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "letsencrypt:/letsencrypt"
-      - "/var/log/traefik:/var/log/traefik"
     networks:
       - flower_garden-net
 
