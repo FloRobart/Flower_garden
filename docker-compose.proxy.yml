@@ -33,7 +33,7 @@ services:
   floraccess-server:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.floraccess.rule=Host(`floraccess-server.florobart.fr`)"
+      - "traefik.http.routers.floraccess.rule=Host(`floraccessserver.florobart.fr`)"
       - "traefik.http.routers.floraccess.entrypoints=websecure"
       - "traefik.http.routers.floraccess.tls.certresolver=le"
       - "traefik.http.services.floraccess.loadbalancer.server.port=80"
@@ -42,7 +42,7 @@ services:
   econoris-server:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.econoris.rule=Host(`econoris-server.florobart.fr`)"
+      - "traefik.http.routers.econoris.rule=Host(`econorisserver.florobart.fr`)"
       - "traefik.http.routers.econoris.entrypoints=websecure"
       - "traefik.http.routers.econoris.tls.certresolver=le"
       - "traefik.http.services.econoris.loadbalancer.server.port=80"
