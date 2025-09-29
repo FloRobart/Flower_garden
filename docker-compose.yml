@@ -124,6 +124,8 @@ services:
       dockerfile: Dockerfile
     image: econoris-app-web:latest
     restart: always
+    env_file:
+      - ./config/.env.econoris_app
     networks:
       - flower_garden-net
     ports:
