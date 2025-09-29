@@ -33,6 +33,7 @@ services:
   floraccess-server:
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=flower_garden-net"
       - "traefik.http.routers.floraccess-server.rule=Host(`floraccessserver.florobart.fr`)"
       - "traefik.http.routers.floraccess-server.entrypoints=websecure"
       - "traefik.http.routers.floraccess-server.tls.certresolver=le"
@@ -42,6 +43,7 @@ services:
   econoris-server:
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=flower_garden-net"
       - "traefik.http.routers.econoris-server.rule=Host(`econorisserver.florobart.fr`)"
       - "traefik.http.routers.econoris-server.entrypoints=websecure"
       - "traefik.http.routers.econoris-server.tls.certresolver=le"
@@ -54,6 +56,7 @@ services:
   econoris-app-web:
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=flower_garden-net"
       - "traefik.http.routers.econoris-app-web.rule=Host(`econoris.florobart.fr`)"
       - "traefik.http.routers.econoris-app-web.entrypoints=websecure"
       - "traefik.http.routers.econoris-app-web.tls.certresolver=le"
