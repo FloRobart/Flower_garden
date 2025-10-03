@@ -5,7 +5,7 @@ services:
   # FlorAccess Database #
   floraccess-db:
     build:
-      context: ./FlorAccess/Database
+      context: ./FlorAccess_server/Database
       dockerfile: Dockerfile
     image: floraccess-db:latest
     restart: always
@@ -13,7 +13,7 @@ services:
       - ./config/.env.floraccess_db
     volumes:
       - floraccess_db_data:/var/lib/postgresql/floraccess_db_data
-      - ./FlorAccess/Database:/docker-entrypoint-initdb.d
+      - ./FlorAccess_server/Database:/docker-entrypoint-initdb.d
     networks:
       - floraccess-net
     healthcheck:
@@ -49,7 +49,7 @@ services:
   # FlorAccess Server #
   floraccess-server:
     build:
-      context: ./FlorAccess
+      context: ./FlorAccess_server
       dockerfile: Dockerfile
     image: floraccess-server:latest
     restart: always
