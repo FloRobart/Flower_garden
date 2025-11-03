@@ -13,7 +13,6 @@ services:
       - ./config/.env.floraccess_db
     volumes:
       - floraccess_db_data:/var/lib/postgresql/floraccess_db_data
-      - ./FlorAccess_server/Database:/docker-entrypoint-initdb.d
     networks:
       - floraccess-net
     healthcheck:
@@ -33,7 +32,6 @@ services:
       - ./config/.env.econoris_db
     volumes:
       - econoris_db_data:/var/lib/postgresql/econoris_db_data
-      - ./Econoris_server/Database:/docker-entrypoint-initdb.d
     networks:
       - econoris-net
     healthcheck:
