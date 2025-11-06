@@ -19,3 +19,16 @@ services:
     command: ["npm", "run", "dev"]
     tmpfs:
       - /app/src/swagger/json:rw,uid=1800,gid=1800
+
+
+
+  #==========#
+  # Web apps #
+  #==========#
+  econoris-app-web:
+    volumes:
+      - ./econoris_app/build/web:/usr/share/nginx/html/
+    command: ["nginx", "-g", "daemon off;"]
+    working_dir: /app
+    environment:
+      - FLUTTER_ENV=dev
