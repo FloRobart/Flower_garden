@@ -4,7 +4,7 @@ services:
   #==========#
   # FlorAccess Database #
   floraccess-db:
-    image: floraccess-db:latest
+    image: florobart/floraccess-db:latest
     restart: always
     env_file:
       - ./config/.env.floraccess_db
@@ -22,7 +22,7 @@ services:
 
   # Econoris Database #
   econoris-db:
-    image: econoris-db:latest
+    image: florobart/econoris-db:latest
     restart: always
     env_file:
       - ./config/.env.econoris_db
@@ -44,7 +44,7 @@ services:
   #========#
   # FlorAccess Server #
   floraccess-server:
-    image: floraccess-server:latest
+    image: florobart/floraccess-server:latest
     restart: always
     env_file:
       - ./config/.env.floraccess_server
@@ -75,7 +75,7 @@ services:
 
   # Econoris Server #
   econoris-server:
-    image: econoris-server:latest
+    image: florobart/econoris-server:latest
     restart: always
     env_file:
       - ./config/.env.econoris_server
@@ -109,7 +109,7 @@ services:
   # Web apps #
   #==========#
   econoris-app-web:
-    image: econoris-app-web:latest
+    image: florobart/econoris-app-web:latest
     restart: always
     env_file:
       - ./config/.env.econoris_app
