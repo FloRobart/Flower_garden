@@ -35,6 +35,19 @@ for f in ./config/.env.example.*; do
         else
             ln -s "$link_target" "$link_name"
             echo "[✅] Lien créé : $link_name -> $link_target"
+
+            env_example_path="./config/.env.example.ln.${app_name}"
+            env_path="../${app_name}/.env"
+            if [ -d "../${app_name}" ]; then
+                if [ ! -f "$env_path" ] && [ -f "$env_example_path" ]; then
+                    cp "$env_example_path" "$env_path"
+                    echo "[✅] Copie : $env_example_path -> $env_path"
+                elif [ -f "$env_path" ]; then
+                    echo "[ℹ️] Le fichier $env_path existe déjà, aucune copie effectuée."
+                fi
+            else
+                echo "[⚠️] Le dossier ../${app_name} n'existe pas, impossible de copier $env_example_path."
+            fi
         fi
     else
         target="./config/.env.${f##*.}"

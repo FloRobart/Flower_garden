@@ -1,0 +1,34 @@
+services:
+  #========#
+  # Server #
+  #========#
+  # FlorAccess Server #
+  floraccess-server:
+    volumes:
+      - ./FlorAccess_server:/app/
+      - ./FlorAccess_server/node_modules:/app/node_modules
+    command: ["npm", "run", "dev"]
+    tmpfs:
+      - /app/src/swagger/json:rw,uid=1800,gid=1800
+
+  # Econoris Server #
+  econoris-server:
+    volumes:
+      - ./Econoris_server:/app/
+      - ./Econoris_server/node_modules:/app/node_modules
+    command: ["npm", "run", "dev"]
+    tmpfs:
+      - /app/src/swagger/json:rw,uid=1800,gid=1800
+
+
+
+  #==========#
+  # Web apps #
+  #==========#
+  econoris-app-web:
+    volumes:
+      - ./econoris_app/build/web:/usr/share/nginx/html/
+    command: ["nginx", "-g", "daemon off;"]
+    working_dir: /app
+    environment:
+      - FLUTTER_ENV=dev
