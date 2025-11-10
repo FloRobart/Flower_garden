@@ -126,6 +126,8 @@ services:
     restart: always
     env_file:
       - ./config/.env.econoris_app
+    volumes:
+      - ./config/.env.econoris_app:/usr/share/nginx/html/assets/.env:ro
     networks:
       - flower_garden-net
     ports:
