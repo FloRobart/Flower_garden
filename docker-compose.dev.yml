@@ -1,9 +1,28 @@
 services:
+  #==========#
+  # Database #
+  #==========#
+  # FlorAccess Database #
+  floraccess-db:
+    build:
+      context: ./FlorAccess_server/Database
+      dockerfile: Dockerfile
+
+  # Econoris Database #
+  econoris-db:
+    build:
+      context: ./Econoris_server/Database
+      dockerfile: Dockerfile
+
+
   #========#
   # Server #
   #========#
   # FlorAccess Server #
   floraccess-server:
+    build:
+      context: ./FlorAccess_server
+      dockerfile: Dockerfile
     volumes:
       - ./FlorAccess_server:/app/
       - ./FlorAccess_server/node_modules:/app/node_modules
@@ -13,6 +32,9 @@ services:
 
   # Econoris Server #
   econoris-server:
+    build:
+      context: ./Econoris_server
+      dockerfile: Dockerfile
     volumes:
       - ./Econoris_server:/app/
       - ./Econoris_server/node_modules:/app/node_modules
@@ -21,11 +43,13 @@ services:
       - /app/src/swagger/json:rw,uid=1800,gid=1800
 
 
-
   #==========#
   # Web apps #
   #==========#
   econoris-app-web:
+    build:
+      context: ./econoris_app
+      dockerfile: Dockerfile
     volumes:
       - ./econoris_app/build/web:/usr/share/nginx/html/
     command: ["nginx", "-g", "daemon off;"]
