@@ -67,48 +67,44 @@ Avant de commencer, assurez-vous d'avoir satisfait aux exigences suivantes :
 
 ## Mise en production
 
-- Comming soon...
+- Créer un dossier `Flower_garden` sur votre serveur de production.
+
+  ```bash
+  mkdir Flower_garden
+  cd Flower_garden
+  ```
+
+- Téléchargez la release la plus récente
+
+  ```bash
+  curl -L https://github.com/FloRobart/Flower_garden/releases/download/v1.0.0/Flower_garden.tar.gz | tar -xz
+  ```
+
+- Créer les fichiers d'environnement
+
+  ```bash
+  ./init-env.sh
+  ```
+
+- Lancez l'application
+
+  ```bash
+  docker-compose -f docker-compose.yml -f docker-compose.proxy.yml up -d
+  ```
 
 ## Liste des projets inclus
 
-### [FlorAccess serveur](https://github.com/FloRobart/FlorAccess)
+### [FlorAccess serveur](https://github.com/FloRobart/FlorAccess_server)
 
-FlorAccess est une API d'authentification.
-
-<details>
-<summary>Voir les caractéristiques techniques</summary>
-
-  - Langage : TypeScript
-  - Framework : Express.js
-  - Base de données : PostgreSQL
-  - Authentification : JWT
-
-</details>
+[FlorAccess](https://github.com/FloRobart/FlorAccess_server) est une API d'authentification.
 
 ### [Econoris serveur](https://github.com/FloRobart/Econoris_server)
 
-Econoris serveur est le backend de l'application Econoris.
-
-<details>
-<summary>Voir les caractéristiques techniques</summary>
-
-  - Langage : TypeScript
-  - Framework : Express.js
-  - Base de données : PostgreSQL
-  - Authentification : JWT
-
-</details>
+[Econoris](https://github.com/FloRobart/Econoris_server) serveur est le backend de l'application Econoris.
 
 ### [Econoris app](https://github.com/FloRobart/econoris_app)
 
-Econoris app est le frontend de l'application Econoris.
-
-<details>
-<summary>Voir les caractéristiques techniques</summary>
-
-  - Langage : Flutter (dart)
-
-</details>
+[Econoris app](https://github.com/FloRobart/econoris_app) est le frontend de l'application Econoris.
 
 ## Architecture
 
