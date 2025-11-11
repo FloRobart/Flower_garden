@@ -1,0 +1,53 @@
+name: Create GitHub Release
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read version
+        id: version
+        run: echo "version=$(cat version)" >> $GITHUB_OUTPUT
+
+      - name: Make release.sh executable
+        run: chmod +x ./release.sh
+
+      - name: Run release script
+        id: build
+        run: |
+          set -e
+          ./release.sh || echo "Script failed, checking for existing release archive..."
+          # Si le script échoue, on continue pour tenter d’utiliser un artefact existant
+
+      - name: Find release file
+        id: artifact
+        run: |
+          mkdir -p releases
+          file=$(ls -t ./releases/* 2>/dev/null | head -n 1 || true)
+          if [ -z "$file" ]; then
+            echo "❌ Aucun fichier trouvé dans ./releases et le script a échoué."
+            exit 1
+          fi
+          echo "file=$file" >> $GITHUB_OUTPUT
+          echo "✅ Fichier de release trouvé : $file"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: "Release v${{ steps.version.outputs.version }}"
+          files: ${{ steps.artifact.outputs.file }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
