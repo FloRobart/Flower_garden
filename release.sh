@@ -14,7 +14,7 @@ shopt -s nullglob
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT_DIR"
 
-DEPLOY_DIR=".deploy"
+DEPLOY_DIR="releases"
 ARCHIVE_NAME="Flower_garden.tar.gz"
 ARCHIVE_PATH="$DEPLOY_DIR/$ARCHIVE_NAME"
 
