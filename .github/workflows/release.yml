@@ -42,11 +42,21 @@ jobs:
           echo "file=$file" >> $GITHUB_OUTPUT
           echo "✅ Fichier de release trouvé : $file"
 
+      - name: Format repository name
+        id: repo_name
+        run: |
+          repo="${GITHUB_REPOSITORY}"
+          # On enlève le propriétaire
+          repo_name="${repo#*/}"
+          # On remplace les underscores par des espaces
+          repo_name="${repo_name//_/ }"
+          echo "name=$repo_name" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.version }}
-          name: "Release v${{ steps.version.outputs.version }}"
+          name: "${{ steps.repo_name.outputs.name }} v${{ steps.version.outputs.version }}"
           files: ${{ steps.artifact.outputs.file }}
           generate_release_notes: true
         env:

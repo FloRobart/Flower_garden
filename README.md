@@ -89,7 +89,7 @@ Avant de commencer, assurez-vous d'avoir satisfait aux exigences suivantes :
 - Lancez l'application
 
   ```bash
-  docker-compose -f docker-compose.yml -f docker-compose.proxy.yml up -d
+  docker compose -f docker-compose.yml -f docker-compose.proxy.yml up -d
   ```
 
 ## Liste des projets inclus

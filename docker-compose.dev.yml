@@ -13,6 +13,12 @@ services:
     build:
       context: ./Econoris_server/Database
       dockerfile: Dockerfile
+  
+  # FlollyList Database #
+  flollylist-db:
+    build:
+      context: ./FlollyList_server/Database
+      dockerfile: Dockerfile
 
 
   #========#
@@ -38,6 +44,18 @@ services:
     volumes:
       - ./Econoris_server:/app/
       - ./Econoris_server/node_modules:/app/node_modules
+    command: ["npm", "run", "dev"]
+    tmpfs:
+      - /app/src/swagger/json:rw,uid=1800,gid=1800
+  
+  # FlollyList Server #
+  flollylist-server:
+    build:
+      context: ./FlollyList_server
+      dockerfile: Dockerfile
+    volumes:
+      - ./FlollyList_server:/app/
+      - ./FlollyList_server/node_modules:/app/node_modules
     command: ["npm", "run", "dev"]
     tmpfs:
       - /app/src/swagger/json:rw,uid=1800,gid=1800
