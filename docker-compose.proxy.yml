@@ -51,10 +51,21 @@ services:
       - "traefik.http.routers.econoris-server.tls.certresolver=le"
       - "traefik.http.services.econoris-server.loadbalancer.server.port=80"
 
+  # FlollyList Server #
+  flollylist-server:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=flower_garden_flower_garden-net"
+      - "traefik.http.routers.flollylist-server.rule=Host(`flollylistserver.florobart.fr`)"
+      - "traefik.http.routers.flollylist-server.entrypoints=websecure"
+      - "traefik.http.routers.flollylist-server.tls.certresolver=le"
+      - "traefik.http.services.flollylist-server.loadbalancer.server.port=80"
+
 
   #==========#
   # Web apps #
   #==========#
+  # Econoris App Web #
   econoris-app-web:
     labels:
       - "traefik.enable=true"
@@ -63,6 +74,16 @@ services:
       - "traefik.http.routers.econoris-app-web.entrypoints=websecure"
       - "traefik.http.routers.econoris-app-web.tls.certresolver=le"
       - "traefik.http.services.econoris-app-web.loadbalancer.server.port=80"
+
+  # FlollyList Server #
+  flollylist-app-web:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=flower_garden_flower_garden-net"
+      - "traefik.http.routers.flollylist-app-web.rule=Host(`flollylist.florobart.fr`)"
+      - "traefik.http.routers.flollylist-app-web.entrypoints=websecure"
+      - "traefik.http.routers.flollylist-app-web.tls.certresolver=le"
+      - "traefik.http.services.flollylist-app-web.loadbalancer.server.port=80"
 
 
 
