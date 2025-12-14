@@ -26,9 +26,7 @@ services:
   #========#
   # FlorAccess Server #
   floraccess-server:
-    build:
-      context: ./FlorAccess_server
-      dockerfile: Dockerfile
+    image: node:lts-alpine
     volumes:
       - ./FlorAccess_server:/app/
       - ./FlorAccess_server/node_modules:/app/node_modules
@@ -38,9 +36,7 @@ services:
 
   # Econoris Server #
   econoris-server:
-    build:
-      context: ./Econoris_server
-      dockerfile: Dockerfile
+    image: node:lts-alpine
     volumes:
       - ./Econoris_server:/app/
       - ./Econoris_server/node_modules:/app/node_modules
@@ -50,9 +46,7 @@ services:
   
   # FlollyList Server #
   flollylist-server:
-    build:
-      context: ./FlollyList_server
-      dockerfile: Dockerfile
+    image: node:lts-alpine
     volumes:
       - ./FlollyList_server:/app/
       - ./FlollyList_server/node_modules:/app/node_modules
@@ -64,12 +58,23 @@ services:
   #==========#
   # Web apps #
   #==========#
+  # Econoris App Web #
   econoris-app-web:
-    build:
-      context: ./econoris_app
-      dockerfile: Dockerfile
+    image: nginx:stable-alpine
     volumes:
       - ./econoris_app/build/web:/usr/share/nginx/html/
+      - ./econoris_app/nginx.conf:/etc/nginx/conf.d/default.conf
+    command: ["nginx", "-g", "daemon off;"]
+    working_dir: /app
+    environment:
+      - FLUTTER_ENV=dev
+
+  # FlollyList App Web #
+  flollylist-app-web:
+    image: nginx:stable-alpine
+    volumes:
+      - ./flollylist_app/build/web:/usr/share/nginx/html/
+      - ./flollylist_app/nginx.conf:/etc/nginx/conf.d/default.conf
     command: ["nginx", "-g", "daemon off;"]
     working_dir: /app
     environment:

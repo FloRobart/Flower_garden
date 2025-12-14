@@ -15,6 +15,8 @@
     - [FlorAccess serveur](#floraccess-serveur)
     - [Econoris serveur](#econoris-serveur)
     - [Econoris app](#econoris-app)
+    - [FlollyList serveur](#flollylist-serveur)
+    - [FlollyList app](#flollylist-app)
   - [Architecture](#architecture)
 
 </details>
@@ -105,6 +107,14 @@ Avant de commencer, assurez-vous d'avoir satisfait aux exigences suivantes :
 ### [Econoris app](https://github.com/FloRobart/econoris_app)
 
 [Econoris app](https://github.com/FloRobart/econoris_app) est le frontend de l'application Econoris.
+
+### [FlollyList serveur](https://github.com/FloRobart/FlollyList_server)
+
+[FlollyList](https://github.com/FloRobart/FlollyList_server) serveur est le backend de l'application FlollyList.
+
+### [FlollyList app](https://github.com/FloRobart/flollylist_app)
+
+[FlollyList app](https://github.com/FloRobart/flollylist_app) est le frontend de l'application FlollyList.
 
 ## Architecture
 
