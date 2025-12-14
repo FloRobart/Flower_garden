@@ -75,7 +75,7 @@ services:
       - "traefik.http.routers.econoris-app-web.tls.certresolver=le"
       - "traefik.http.services.econoris-app-web.loadbalancer.server.port=80"
 
-  # FlollyList Server #
+  # FlollyList App Web #
   flollylist-app-web:
     labels:
       - "traefik.enable=true"
