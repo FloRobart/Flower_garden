@@ -1,0 +1,91 @@
+services:
+  #=======================#
+  # Reverse proxy Traefik #
+  #=======================#
+  traefik:
+    image: traefik:latest
+    restart: always
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--certificatesresolvers.le.acme.httpchallenge=true"
+      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.le.acme.email=${LETSENCRYPT_EMAIL}"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+      - "--log.level=${TRAEFIK_LOG_LEVEL:-INFO}"
+      - "--accesslog=${TRAEFIK_ACCESS_LOG:-true}"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "letsencrypt:/letsencrypt"
+    networks:
+      - flower_garden-net
+
+
+  #========#
+  # Server #
+  #========#
+  # FlorAccess Server #
+  floraccess-server:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=flower_garden_flower_garden-net"
+      - "traefik.http.routers.floraccess-server.rule=Host(`floraccessserver.florobart.fr`)"
+      - "traefik.http.routers.floraccess-server.entrypoints=websecure"
+      - "traefik.http.routers.floraccess-server.tls.certresolver=le"
+      - "traefik.http.services.floraccess-server.loadbalancer.server.port=80"
+
+  # Econoris Server #
+  econoris-server:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=flower_garden_flower_garden-net"
+      - "traefik.http.routers.econoris-server.rule=Host(`econorisserver.florobart.fr`)"
+      - "traefik.http.routers.econoris-server.entrypoints=websecure"
+      - "traefik.http.routers.econoris-server.tls.certresolver=le"
+      - "traefik.http.services.econoris-server.loadbalancer.server.port=80"
+
+  # FlollyList Server #
+  flollylist-server:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=flower_garden_flower_garden-net"
+      - "traefik.http.routers.flollylist-server.rule=Host(`flollylistserver.florobart.fr`)"
+      - "traefik.http.routers.flollylist-server.entrypoints=websecure"
+      - "traefik.http.routers.flollylist-server.tls.certresolver=le"
+      - "traefik.http.services.flollylist-server.loadbalancer.server.port=80"
+
+
+  #==========#
+  # Web apps #
+  #==========#
+  # Econoris App Web #
+  econoris-app-web:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=flower_garden_flower_garden-net"
+      - "traefik.http.routers.econoris-app-web.rule=Host(`econoris.florobart.fr`)"
+      - "traefik.http.routers.econoris-app-web.entrypoints=websecure"
+      - "traefik.http.routers.econoris-app-web.tls.certresolver=le"
+      - "traefik.http.services.econoris-app-web.loadbalancer.server.port=80"
+
+  # FlollyList App Web #
+  flollylist-app-web:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=flower_garden_flower_garden-net"
+      - "traefik.http.routers.flollylist-app-web.rule=Host(`flollylist.florobart.fr`)"
+      - "traefik.http.routers.flollylist-app-web.entrypoints=websecure"
+      - "traefik.http.routers.flollylist-app-web.tls.certresolver=le"
+      - "traefik.http.services.flollylist-app-web.loadbalancer.server.port=80"
+
+
+
+volumes:
+  letsencrypt:
