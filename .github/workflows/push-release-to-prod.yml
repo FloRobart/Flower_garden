@@ -29,6 +29,13 @@ jobs:
           mkdir -p extracted
           tar -xzf releases/Flower_garden.tar.gz -C extracted
 
+      - name: liste releases et extracted
+        run: |
+          echo 'Contenu de releases:'
+          ls -l releases || true
+          echo 'Contenu de extracted:'
+          ls -l extracted || true
+
       - name: Prepare and push `prod` branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -51,8 +58,15 @@ jobs:
           # Remove everything except .git to ensure only release files remain
           find . -maxdepth 1 -mindepth 1 ! -name .git -exec rm -rf {} + || true
 
-          # Copy extracted release files into repo root
-          cp -a extracted/. .
+
+          # Vérifie que le dossier extracted n'est pas vide
+          if [ "$(ls -A extracted)" ]; then
+            # Copy extracted release files into repo root
+            cp -a extracted/. .
+          else
+            echo "Erreur: le dossier extracted est vide !" >&2
+            exit 2
+          fi
 
           # Commit and push (force) to prod
           git add -A
