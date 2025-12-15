@@ -55,8 +55,8 @@ jobs:
             git reset --hard
           fi
 
-          # Remove everything except .git to ensure only release files remain
-          find . -maxdepth 1 -mindepth 1 ! -name .git -exec rm -rf {} + || true
+          # Remove everything except .git and extracted to ensure only release files remain
+          find . -maxdepth 1 -mindepth 1 ! -name .git ! -name extracted -exec rm -rf {} + || true
 
 
           # Vérifie que le dossier extracted n'est pas vide
