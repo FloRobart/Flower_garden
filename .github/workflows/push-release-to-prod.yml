@@ -68,6 +68,9 @@ jobs:
             exit 2
           fi
 
+          # Remove the extracted directory
+          rm -rf extracted
+
           # Commit and push (force) to prod
           git add -A
           if git commit -m "Update prod release from $GITHUB_SHA"; then
