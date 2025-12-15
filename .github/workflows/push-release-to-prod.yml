@@ -1,0 +1,64 @@
+name: Push release to prod
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Build release and push to prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run release script
+        run: |
+          chmod +x ./release.sh || true
+          ./release.sh
+
+      - name: Extract release archive
+        run: |
+          mkdir -p extracted
+          tar -xzf releases/Flower_garden.tar.gz -C extracted
+
+      - name: Prepare and push `prod` branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Try to fetch remote prod branch if it exists
+          git fetch origin prod || true
+
+          if git rev-parse --verify origin/prod >/dev/null 2>&1; then
+            git checkout prod
+            git reset --hard origin/prod
+            git rm -rf . || true
+          else
+            git checkout --orphan prod
+            git reset --hard
+          fi
+
+          # Remove everything except .git to ensure only release files remain
+          find . -maxdepth 1 -mindepth 1 ! -name .git -exec rm -rf {} + || true
+
+          # Copy extracted release files into repo root
+          cp -a extracted/. .
+
+          # Commit and push (force) to prod
+          git add -A
+          if git commit -m "Update prod release from $GITHUB_SHA"; then
+            git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+            git push -f origin prod
+          else
+            echo "No changes to commit"
+          fi
