@@ -37,7 +37,7 @@ services:
       interval: 5s
       timeout: 30s
       retries: 5
-  
+
   # FlollyList Database #
   flollylist-db:
     image: florobart/flollylist-db:latest
@@ -121,7 +121,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  
+
   # FlollyList Server #
   flollylist-server:
     image: florobart/flollylist-server:latest
