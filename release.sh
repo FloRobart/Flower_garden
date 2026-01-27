@@ -8,6 +8,7 @@ shopt -s nullglob
 # - traefik.yml
 # - docker-compose.yml
 # - docker-compose.proxy.yml
+# - fg.sh
 # - .env.example
 # - tous les fichiers dans ./config dont le nom contient 'example' (insensible à la casse)
 # - version
@@ -22,7 +23,7 @@ ARCHIVE_PATH="$DEPLOY_DIR/$ARCHIVE_NAME"
 declare -a files
 
 # Liste de fichiers requis (on alerte si manquant mais on continue)
-for f in init-env.sh traefik.yml docker-compose.yml docker-compose.proxy.yml .env.example version; do
+for f in init-env.sh traefik.yml docker-compose.yml docker-compose.proxy.yml fg.sh .env.example version; do
 	if [ -e "$f" ]; then
 		files+=("$f")
 	else
