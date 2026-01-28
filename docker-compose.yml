@@ -266,7 +266,7 @@ services:
     user: "1800:1800"
     tmpfs:
       - /tmp:exec,nosuid,nodev,uid=1800,gid=1800
-      - /app/${FLOWER_GARDEN_DIR_CACHE_PATH}/:rw,uid=1800,gid=1800
+      - /app/${FLOWER_GARDEN_APP_DIR_CACHE_PATH}/:rw,uid=1800,gid=1800
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://flower-garden-app:80/ || exit 1"]
       interval: 10s
