@@ -65,6 +65,16 @@ services:
   #==========#
   # Web apps #
   #==========#
+  # Floraccess App Web #
+  floraccess-app-web:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=flower_garden_flower-garden-net"
+      - "traefik.http.routers.floraccess-app-web.rule=Host(`floraccess.florobart.fr`)"
+      - "traefik.http.routers.floraccess-app-web.entrypoints=websecure"
+      - "traefik.http.routers.floraccess-app-web.tls.certresolver=le"
+      - "traefik.http.services.floraccess-app-web.loadbalancer.server.port=80"
+
   # Econoris App Web #
   econoris-app-web:
     labels:
