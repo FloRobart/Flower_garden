@@ -136,6 +136,27 @@ services:
   #==========#
   # Web apps #
   #==========#
+  # Floraccess App Web #
+  floraccess-app-web:
+    image: nginx:stable-alpine
+    working_dir: /app
+    env_file:
+      - ./config/.env.floraccess_app
+    networks:
+      - flower-garden-net
+    ports:
+      - ${FLORACCESS_APP_PORT:-}:80
+    depends_on:
+      floraccess-server:
+        condition: service_healthy
+    volumes:
+      - ./floraccess_app/build/web:/usr/share/nginx/html/
+      - ./floraccess_app/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./config/.env.floraccess_app:/usr/share/nginx/html/assets/.env:ro
+    command: ["nginx", "-g", "daemon off;"]
+    environment:
+      - FLUTTER_ENV=dev
+
   # Econoris App Web #
   econoris-app-web:
     image: nginx:stable-alpine
