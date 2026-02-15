@@ -95,11 +95,12 @@ services:
       - "traefik.http.routers.flollylist-app-web.tls.certresolver=le"
       - "traefik.http.services.flollylist-app-web.loadbalancer.server.port=80"
 
+  # Flower Garden App #
   flower-garden-app:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=flower_garden_flower-garden-net"
-      - "traefik.http.routers.flower-garden-app.rule=Host(`flower-garden.florobart.fr`)"
+      - "traefik.http.routers.flower-garden-app.rule=Host(`florobart.fr`)"
       - "traefik.http.routers.flower-garden-app.entrypoints=websecure"
       - "traefik.http.routers.flower-garden-app.tls.certresolver=le"
       - "traefik.http.services.flower-garden-app.loadbalancer.server.port=80"
