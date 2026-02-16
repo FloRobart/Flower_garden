@@ -27,6 +27,7 @@ services:
     networks:
       - flower-garden-net
       - cv-network
+      - documentations-network
 
 
   #========#
@@ -115,4 +116,6 @@ volumes:
 
 networks:
   cv-network:
+    external: true
+  documentations-network:
     external: true
