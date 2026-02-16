@@ -26,6 +26,7 @@ services:
       - "letsencrypt:/letsencrypt"
     networks:
       - flower-garden-net
+      - cv-network
 
 
   #========#
@@ -109,3 +110,9 @@ services:
 
 volumes:
   letsencrypt:
+
+
+
+networks:
+  cv-network:
+    external: true
