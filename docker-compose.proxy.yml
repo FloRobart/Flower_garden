@@ -28,6 +28,7 @@ services:
       - flower-garden-net
       - cv-network
       - documentations-network
+      - iscod-network
 
 
   #========#
