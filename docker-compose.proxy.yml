@@ -108,6 +108,15 @@ services:
       - "traefik.http.routers.flower-garden-app.tls.certresolver=le"
       - "traefik.http.services.flower-garden-app.loadbalancer.server.port=80"
 
+  # Econoris vitrine #
+  econoris-vitrine:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=flower_garden_flower-garden-net"
+      - "traefik.http.routers.econoris-vitrine.rule=Host(`econoris.fr`)"
+      - "traefik.http.routers.econoris-vitrine.entrypoints=websecure"
+      - "traefik.http.routers.econoris-vitrine.tls.certresolver=le"
+      - "traefik.http.services.econoris-vitrine.loadbalancer.server.port=80"
 
 
 volumes:
